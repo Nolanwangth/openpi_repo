@@ -3,6 +3,11 @@ lerobot_dataset/
 record/
 outputs/
 
+outputs/         
+logs/            
+wandb/            
+
+
 # 2. 忽略整个模型权重文件夹（最保险）
 lerobot/pi05_base/
 checkpoints/
