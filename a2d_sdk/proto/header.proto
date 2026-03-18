@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+message Timestamp {
+    int32 sec = 1;
+    uint32 nanosec = 2;
+}
+
+message Header {
+    int32 seq = 1;
+    Timestamp stamp = 2;
+    string frame_id = 3;
+}
