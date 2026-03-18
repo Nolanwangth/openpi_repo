@@ -10,11 +10,41 @@
 
 | 环境名称 | 核心用途 | 关键组件 |
 | :--- | :--- | :--- |
+| `pi05_env` | **LeRobot / Pi05 策略测试** | `lerobot`, `pytest`, `transformers` |
 | `agipi` | **主开发/训练** | `torch`, `accelerate`, `pi05_base` |
 | `agipi_robo` | **实机控制** | `a2d-sdk`, `cosine-bus` (底层硬件通信) |
 | `lerobot_conv` | **数据转换备份** | `h5py`, `numpy` |
 
-> **激活主环境指令**: `conda activate agipi`
+> **激活主环境指令**: `conda activate agipi`  
+> **跑 Pi05 测试**: `conda activate pi05_env`
+
+### 跑通 Pi05 测试 (`lerobot/tests/policies/pi0_pi05/test_pi05.py`)
+
+测试需要 **CUDA** 和 **Hugging Face Token**（用于 gated 模型），按下面配置后测试就不会被 skip：
+
+1. **安装本地 lerobot 与 pytest**（在仓库根目录）：
+   ```bash
+   conda activate pi05_env
+   pip install -e lerobot
+   pip install pytest
+   ```
+
+2. **配置 Hugging Face Token**（二选一）：
+   ```bash
+   # 方式 A：交互登录（推荐）
+   huggingface-cli login
+   ```
+   或  
+   ```bash
+   # 方式 B：环境变量（CI 或脚本用）
+   export HF_TOKEN="你的_hf_ token"
+   ```
+   若使用 gated 模型，需在 [huggingface.co](https://huggingface.co) 对应模型页同意条款后再用该账号 token。
+
+3. **运行测试**：
+   ```bash
+   python -m pytest lerobot/tests/policies/pi0_pi05/test_pi05.py -q
+   ```
 
 ---
 
