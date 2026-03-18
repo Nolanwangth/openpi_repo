@@ -1,0 +1,37 @@
+// generated from rosidl_adapter/resource/msg.idl.em
+// with input from genie_msgs/msg/app/pnc/TaskState.msg
+// generated code does not contain a copyright notice
+
+#include "std_msgs/msg/Header.idl"
+
+module genie_msgs {
+  module msg {
+    module TaskState_Constants {
+      @verbatim (language="comment", text=
+        "The current state of the task")
+      const uint8 TASK_STATE_IDLE = 0;
+      const uint8 TASK_STATE_STARTING = 1;
+      const uint8 TASK_STATE_RUNNING = 2;
+      const uint8 TASK_STATE_PAUSING = 3;
+      const uint8 TASK_STATE_PAUSED = 4;
+      const uint8 TASK_STATE_RESUMING = 5;
+      const uint8 TASK_STATE_CANCELING = 6;
+      const uint8 TASK_STATE_CANCELED = 7;
+      const uint8 TASK_STATE_FAIL = 8;
+      const uint8 TASK_STATE_SUCCESS = 9;
+    };
+    @verbatim (language="comment", text=
+      "frame id 无用, timestamp发送时间")
+    struct TaskState {
+      std_msgs::msg::Header header;
+
+      @verbatim (language="comment", text=
+        "Unique identifier for the task")
+      uint32 id;
+
+      uint8 state;
+
+      string message;
+    };
+  };
+};

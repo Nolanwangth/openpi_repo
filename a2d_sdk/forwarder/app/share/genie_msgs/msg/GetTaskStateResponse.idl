@@ -1,0 +1,20 @@
+// generated from rosidl_adapter/resource/msg.idl.em
+// with input from genie_msgs/msg/app/pnc/GetTaskStateResponse.msg
+// generated code does not contain a copyright notice
+
+#include "genie_msgs/msg/TaskState.idl"
+#include "std_msgs/msg/Header.idl"
+
+module genie_msgs {
+  module msg {
+    struct GetTaskStateResponse {
+      std_msgs::msg::Header header;
+
+      genie_msgs::msg::TaskState state;
+
+      string uuid;
+
+      string message;
+    };
+  };
+};

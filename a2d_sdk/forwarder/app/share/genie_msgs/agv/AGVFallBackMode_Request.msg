@@ -1,0 +1,3 @@
+# /hal/fallback_mode 控制底盘进入和退出fallback模式
+std_msgs/Header header
+int32 control_id        # 1: 进入fallback模式， 2：退出fallback模式

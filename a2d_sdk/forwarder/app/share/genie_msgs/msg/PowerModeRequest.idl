@@ -1,0 +1,28 @@
+// generated from rosidl_adapter/resource/msg.idl.em
+// with input from genie_msgs/msg/app/state_machine/PowerModeRequest.msg
+// generated code does not contain a copyright notice
+
+#include "std_msgs/msg/Header.idl"
+
+module genie_msgs {
+  module msg {
+    struct PowerModeRequest {
+      std_msgs::msg::Header header;
+
+      @verbatim (language="comment", text=
+        "目标电源模式" "\n"
+        "无效 =0/ 休眠 = 1 /放电 = 2/充电 = 3 /低功率 = 4/换电 = 5")
+      uint8 target_power_mode;
+
+      @verbatim (language="comment", text=
+        "无效=0/开关=1/HMI=2/远程=3/语音=4/" "\n"
+        "充电插入=5/外设插入=6/" "\n"
+        "急停=7/电池保护=8/")
+      uint8 request_method;
+
+      string uuid;
+
+      string detail;
+    };
+  };
+};

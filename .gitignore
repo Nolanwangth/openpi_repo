@@ -1,0 +1,51 @@
+# 1. 忽略大型数据集和记录
+lerobot_dataset/
+record/
+outputs/
+
+# 2. 忽略整个模型权重文件夹（最保险）
+lerobot/pi05_base/
+checkpoints/
+
+# 3. 忽略常见的重型二进制文件（防止 SDK 里藏着大文件）
+*.safetensors
+*.pth
+*.pt
+*.ckpt
+*.bin
+*.onnx
+*.so
+*.a
+*.lib
+*.exe
+
+# 4. 忽略文档和压缩包
+*.pdf
+*.zip
+*.tar.gz
+*.7z
+
+# 5. 忽略 Python 环境和缓存
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+env/
+.env
+
+# 6. 忽略 IDE 配置文件
+.vscode/
+.idea/
+.DS_Store
+
+
+
+# 忽略 SDK 里的重型二进制文件
+*.whl
+*.so*
+a2d_sdk/forwarder/app/bin/
+a2d_sdk/forwarder/app/lib/
+
+
+

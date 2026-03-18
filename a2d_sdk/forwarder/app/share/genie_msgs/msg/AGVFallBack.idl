@@ -1,0 +1,19 @@
+// generated from rosidl_adapter/resource/msg.idl.em
+// with input from genie_msgs/msg/hal/agv/AGVFallBack.msg
+// generated code does not contain a copyright notice
+
+#include "std_msgs/msg/Header.idl"
+
+module genie_msgs {
+  module msg {
+    @verbatim (language="comment", text=
+      "topic名： /hal/agv_fallback 在fallback模型下，控制底盘回退，发送频率10Hz, 500ms未收到数据则自动停止")
+    struct AGVFallBack {
+      std_msgs::msg::Header header;
+
+      @verbatim (language="comment", text=
+        "0 停止 1：继续")
+      uint32 type;
+    };
+  };
+};

@@ -1,0 +1,91 @@
+// generated from rosidl_adapter/resource/msg.idl.em
+// with input from genie_msgs/msg/hal/energy/ChassisPowerCtrl.msg
+// generated code does not contain a copyright notice
+
+#include "std_msgs/msg/Header.idl"
+
+module genie_msgs {
+  module msg {
+    @verbatim (language="comment", text=
+      "G02 底盘电源控制")
+    struct ChassisPowerCtrl {
+      std_msgs::msg::Header header;
+
+      @verbatim (language="comment", text=
+        "底盘电源板休眠/唤醒控制    (0：请求底盘电源板低功率状态; 1：请求底盘电源板全功率状态)")
+      uint8 chassis_power_board_power_ctrlreq;
+
+      @verbatim (language="comment", text=
+        "底盘左侧驱动电机供电开关控制   (0：请求关闭供电开关; 1：请求打开供电开关)")
+      uint8 chassis_left_traction_motor_power_ctrl_req;
+
+      @verbatim (language="comment", text=
+        "底盘右侧驱动电机供电开关控制(0：请求关闭供电开关; 1：请求打开供电开关)")
+      uint8 chassis_righttraction_motor_power_ctrl_req;
+
+      @verbatim (language="comment", text=
+        "底盘左侧转向电机供电开关控制   (0：请求关闭供电开关; 1：请求打开供电开关)")
+      uint8 chassis_left_steering_motor_power_ctrl_req;
+
+      @verbatim (language="comment", text=
+        "底盘右侧转向电机供电开关控制 (0：请求关闭供电开关; 1：请求打开供电开关)")
+      uint8 chassis_right_steering_motor_power_ctrl_req;
+
+      @verbatim (language="comment", text=
+        "底盘1号激光雷达供电开关控制    (0：请求关闭供电开关; 1：请求打开供电开关)")
+      uint8 chassis_lidar1_power_ctrl_req;
+
+      @verbatim (language="comment", text=
+        "底盘2号激光雷达供电开关控制 (0：请求关闭供电开关; 1：请求打开供电开关)")
+      uint8 chassis_lidar2_power_ctrl_req;
+
+      @verbatim (language="comment", text=
+        "底盘超声波雷达供电开关控制 (0：请求关闭供电开关; 1：请求打开供电开关)")
+      uint8 chassis_ultrasonic_radar_power_ctrl_req;
+
+      @verbatim (language="comment", text=
+        "底盘TOF相机供电开关控制   (0：请求关闭供电开关; 1：请求打开供电开关)")
+      uint8 chassis_tof_camera_power_ctrl_req;
+
+      @verbatim (language="comment", text=
+        "底盘交换机供电开关控制     (0：请求关闭供电开关; 1：请求打开供电开关)")
+      uint8 chassis_ethernet_switch_power_ctrl_req;
+
+      @verbatim (language="comment", text=
+        "底盘向外供电开关控制        (0：请求关闭供电开关; 1：请求打开供电开关)")
+      uint8 chassis_output_power_ctrl_req;
+
+      @verbatim (language="comment", text=
+        "充电插头供电开关控制 (0：请求关闭供电开关; 1：请求打开供电开关)")
+      uint8 charging_plug_power_ctrl_req;
+
+      @verbatim (language="comment", text=
+        "电池供电总开关控制     (0：请求关闭电池供电总开关; 1：请求打开电池供电总开关)")
+      uint8 battery_power_switch_power_ctrl_req;
+
+      @verbatim (language="comment", text=
+        "电池1号BMS开关控制  (0：请求BMS关闭电池开关关; 1：请求BMS打开电池开关)")
+      uint8 battery1_bms_switch_power_ctrl_req;
+
+      @verbatim (language="comment", text=
+        "电池2号BMS开关控制  (0：请求BMS关闭电池开关关; 1：请求BMS打开电池开关)")
+      uint8 battery2_bms_switch_power_ctrl_req;
+
+      @verbatim (language="comment", text=
+        "电池1号电子解锁控制   (0:请求上锁； 1：请求解锁)")
+      uint8 battery1_unlock_ctrl_req;
+
+      @verbatim (language="comment", text=
+        "电池2号电子解锁控制   (0:请求上锁； 1：请求解锁)")
+      uint8 battery2_unlock_ctrl_req;
+
+      @verbatim (language="comment", text=
+        "充电器最大充电电流控制请求(单位： A, 精度 0.1A, 范围 -44.0A ~ 44.0A)")
+      float charger_max_charging_current_ctrl_req;
+
+      @verbatim (language="comment", text=
+        "充电器最大充电电压控制请求 (单位： V, 精度 0.1V, 范围：-60.0V ~ 60.0V)")
+      float charger_max_charging_voltage_ctrl_req;
+    };
+  };
+};

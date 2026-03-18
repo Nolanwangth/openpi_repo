@@ -1,0 +1,19 @@
+// generated from rosidl_adapter/resource/msg.idl.em
+// with input from genie_msgs/msg/hal/energy/SocPowerCtrl.msg
+// generated code does not contain a copyright notice
+
+#include "std_msgs/msg/Header.idl"
+
+module genie_msgs {
+  module msg {
+    @verbatim (language="comment", text=
+      "G02 SOC电源控制")
+    struct SocPowerCtrl {
+      std_msgs::msg::Header header;
+
+      @verbatim (language="comment", text=
+        "SOC休眠控制请求 (0: 预留 1：不控制休眠 2:请求控制SOC休眠 3：预留)")
+      uint8 power_control_req;
+    };
+  };
+};

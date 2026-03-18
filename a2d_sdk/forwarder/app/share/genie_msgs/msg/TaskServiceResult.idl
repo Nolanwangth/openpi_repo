@@ -1,0 +1,30 @@
+// generated from rosidl_adapter/resource/msg.idl.em
+// with input from genie_msgs/msg/app/pnc/TaskServiceResult.msg
+// generated code does not contain a copyright notice
+
+#include "genie_msgs/msg/TaskState.idl"
+
+module genie_msgs {
+  module msg {
+    module TaskServiceResult_Constants {
+      const uint8 TASK_SERVICE_RESULT_SUCCESS = 0;
+      const uint8 TASK_SERVICE_RESULT_FAIL = 1;
+    };
+    @verbatim (language="comment", text=
+      "0: 命令执行成功" "\n"
+      "1: 命令执行失败")
+    struct TaskServiceResult {
+      uint8 result;
+
+      uint32 id;
+
+      genie_msgs::msg::TaskState task_state;
+
+      uint32 error_code;
+
+      genie_msgs::msg::TaskState state;
+
+      string message;
+    };
+  };
+};
