@@ -49,8 +49,10 @@ env/
 # 忽略 SDK 里的重型二进制文件
 *.whl
 *.so*
-a2d_sdk/forwarder/app/bin/
-a2d_sdk/forwarder/app/lib/
+a2d_sdk/
+
+# 忽略 agibot 文件夹
+agibot/
 
 
 
