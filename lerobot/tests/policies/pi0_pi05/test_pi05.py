@@ -36,7 +36,7 @@ from tests.utils import require_cuda, require_hf_token  # noqa: E402
 def test_policy_instantiation():
     # Create config
     set_seed(42)
-    config = PI05Config(max_action_dim=7, max_state_dim=14, dtype="float32")
+    config = PI05Config(max_action_dim=32, max_state_dim=32, dtype="float32")
 
     # Set up input_features and output_features in the config
     from lerobot.configs.types import FeatureType, PolicyFeature
@@ -44,7 +44,7 @@ def test_policy_instantiation():
     config.input_features = {
         "observation.state": PolicyFeature(
             type=FeatureType.STATE,
-            shape=(14,),
+            shape=(32,),
         ),
         "observation.images.base_0_rgb": PolicyFeature(
             type=FeatureType.VISUAL,
@@ -55,7 +55,7 @@ def test_policy_instantiation():
     config.output_features = {
         "action": PolicyFeature(
             type=FeatureType.ACTION,
-            shape=(7,),
+            shape=(32,),
         ),
     }
 
@@ -66,20 +66,20 @@ def test_policy_instantiation():
     # Create dummy dataset stats
     dataset_stats = {
         "observation.state": {
-            "mean": torch.zeros(14),
-            "std": torch.ones(14),
-            "min": torch.zeros(14),
-            "max": torch.ones(14),
-            "q01": torch.zeros(14),
-            "q99": torch.ones(14),
+            "mean": torch.zeros(32),
+            "std": torch.ones(32),
+            "min": torch.zeros(32),
+            "max": torch.ones(32),
+            "q01": torch.zeros(32),
+            "q99": torch.ones(32),
         },
         "action": {
-            "mean": torch.zeros(7),
-            "std": torch.ones(7),
-            "min": torch.zeros(7),
-            "max": torch.ones(7),
-            "q01": torch.zeros(7),
-            "q99": torch.ones(7),
+            "mean": torch.zeros(32),
+            "std": torch.ones(32),
+            "min": torch.zeros(32),
+            "max": torch.ones(32),
+            "q01": torch.zeros(32),
+            "q99": torch.ones(32),
         },
         "observation.images.base_0_rgb": {
             "mean": torch.zeros(3, 224, 224),
@@ -101,8 +101,8 @@ def test_policy_instantiation():
     preprocessor, postprocessor = make_pi05_pre_post_processors(config=config, dataset_stats=dataset_stats)
     device = config.device
     batch = {
-        "observation.state": torch.randn(batch_size, 14, dtype=torch.float32, device=device),
-        "action": torch.randn(batch_size, config.chunk_size, 7, dtype=torch.float32, device=device),
+        "observation.state": torch.randn(batch_size, 32, dtype=torch.float32, device=device),
+        "action": torch.randn(batch_size, config.chunk_size, 32, dtype=torch.float32, device=device),
         "observation.images.base_0_rgb": torch.rand(
             batch_size, 3, 224, 224, dtype=torch.float32, device=device
         ),  # Use rand for [0,1] range
@@ -141,10 +141,10 @@ def test_policy_instantiation():
 
     # Check AdaRMS configuration in the underlying model
     adarms_config = policy.model.paligemma_with_expert.paligemma.config.text_config.use_adarms
-    assert adarms_config == False, f"PaliGemma should not use AdaRMS, got {adarms_config}"  # noqa: E712
+    assert adarms_config == False, f"PaliGemma should not use AdaRMS, got {adarms_config}"  # noqa: E3212
 
     adarms_expert_config = policy.model.paligemma_with_expert.gemma_expert.config.use_adarms
-    assert adarms_expert_config == True, (  # noqa: E712
+    assert adarms_expert_config == True, (  # noqa: E3212
         f"Action expert should use AdaRMS in pi05, got {adarms_expert_config}"
     )
 
@@ -156,8 +156,8 @@ def test_config_creation():
     try:
         config = make_policy_config(
             policy_type="pi0",
-            max_action_dim=7,
-            max_state_dim=14,
+            max_action_dim=32,
+            max_state_dim=32,
         )
         print("Config created successfully through factory")
         print(f"  Config type: {type(config).__name__}")

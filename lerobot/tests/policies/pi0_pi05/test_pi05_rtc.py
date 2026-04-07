@@ -62,6 +62,7 @@ def test_pi05_rtc_initialization():
     # Instantiate policy
     policy = PI05Policy(config)
 
+
     # Verify RTC processor is initialized
     assert hasattr(policy, "rtc_processor")
     assert policy.rtc_processor is not None
