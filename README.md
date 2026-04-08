@@ -43,6 +43,7 @@
 
 3. **运行测试**：
    ```bash
+   conda activate pi05_env
    python -m pytest lerobot/tests/policies/pi0_pi05/test_pi05.py -s
    ```
 

@@ -72,10 +72,13 @@ class TokenizerProcessorStep(ObservationProcessorStep):
         padding: The padding strategy ('max_length', 'longest', etc.).
         truncation: Whether to truncate sequences longer than `max_length`.
         input_tokenizer: The internal tokenizer instance, loaded during initialization.
+        tokenizer_from_pretrained_kwargs: Optional kwargs for `AutoTokenizer.from_pretrained`
+            (e.g. ``{"local_files_only": True}`` for air-gapped use).
     """
 
     tokenizer_name: str | None = None
     tokenizer: Any | None = None  # Use `Any` for compatibility without a hard dependency
+    tokenizer_from_pretrained_kwargs: dict[str, Any] | None = None
     max_length: int = 512
     task_key: str = "task"
     padding_side: str = "right"
@@ -108,7 +111,8 @@ class TokenizerProcessorStep(ObservationProcessorStep):
         elif self.tokenizer_name is not None:
             if AutoTokenizer is None:
                 raise ImportError("AutoTokenizer is not available")
-            self.input_tokenizer = AutoTokenizer.from_pretrained(self.tokenizer_name)
+            extra = dict(self.tokenizer_from_pretrained_kwargs or {})
+            self.input_tokenizer = AutoTokenizer.from_pretrained(self.tokenizer_name, **extra)
         else:
             raise ValueError(
                 "Either 'tokenizer' or 'tokenizer_name' must be provided. "

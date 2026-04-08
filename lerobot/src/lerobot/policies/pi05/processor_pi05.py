@@ -14,8 +14,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import os
 from copy import deepcopy
 from dataclasses import dataclass
+from pathlib import Path
 from typing import Any
 
 import numpy as np
@@ -42,6 +44,47 @@ from lerobot.utils.constants import (
     POLICY_POSTPROCESSOR_DEFAULT_NAME,
     POLICY_PREPROCESSOR_DEFAULT_NAME,
 )
+
+_PI05_HUB_TOKENIZER_ID = "google/paligemma-3b-pt-224"
+_PI05_TOKENIZER_PATH_ENV = "LEROBOT_PI05_TOKENIZER_PATH"
+
+
+def _hf_hub_root() -> Path:
+    return Path(os.environ.get("HF_HOME", Path.home() / ".cache" / "huggingface")) / "hub"
+
+
+def _find_cached_paligemma_tokenizer_dir() -> Path | None:
+    """Return a snapshot dir that contains tokenizer files, if HF hub cache has one."""
+    snapshots = _hf_hub_root() / "models--google--paligemma-3b-pt-224" / "snapshots"
+    if not snapshots.is_dir():
+        return None
+    found: list[Path] = []
+    for child in snapshots.iterdir():
+        if child.is_dir() and (child / "tokenizer.json").is_file():
+            found.append(child)
+    if not found:
+        return None
+    return max(found, key=lambda p: (p / "tokenizer.json").stat().st_mtime)
+
+
+def resolve_pi05_tokenizer_loading() -> tuple[str, dict[str, Any] | None]:
+    """
+    Prefer a local tokenizer path so offline / air-gapped runs work without Hub calls.
+
+    Resolution order:
+    1. ``LEROBOT_PI05_TOKENIZER_PATH`` if set and contains ``tokenizer.json``
+    2. Hugging Face hub cache for ``google/paligemma-3b-pt-224`` (if present)
+    3. Hub id ``google/paligemma-3b-pt-224`` (may download or query the Hub)
+    """
+    override = os.environ.get(_PI05_TOKENIZER_PATH_ENV, "").strip()
+    if override:
+        p = Path(override).expanduser()
+        if p.is_dir() and (p / "tokenizer.json").is_file():
+            return str(p.resolve()), {"local_files_only": True}
+    cached = _find_cached_paligemma_tokenizer_dir()
+    if cached is not None:
+        return str(cached.resolve()), {"local_files_only": True}
+    return _PI05_HUB_TOKENIZER_ID, None
 
 
 @ProcessorStepRegistry.register(name="pi05_prepare_state_tokenizer_processor_step")
@@ -125,6 +168,8 @@ def make_pi05_pre_post_processors(
         A tuple containing the configured pre-processor and post-processor pipelines.
     """
 
+    tokenizer_name, tokenizer_from_pretrained_kwargs = resolve_pi05_tokenizer_loading()
+
     # Add remaining processors
     input_steps: list[ProcessorStep] = [
         RenameObservationsProcessorStep(rename_map={}),  # To mimic the same processor as pretrained one
@@ -138,7 +183,8 @@ def make_pi05_pre_post_processors(
         ),
         Pi05PrepareStateTokenizerProcessorStep(max_state_dim=config.max_state_dim),
         TokenizerProcessorStep(
-            tokenizer_name="google/paligemma-3b-pt-224",
+            tokenizer_name=tokenizer_name,
+            tokenizer_from_pretrained_kwargs=tokenizer_from_pretrained_kwargs,
             max_length=config.tokenizer_max_length,
             padding_side="right",
             padding="max_length",

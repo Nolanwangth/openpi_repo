@@ -96,6 +96,13 @@ def test_policy_instantiation():
     policy = PI05Policy.from_pretrained("/home/nolan/vla/openpi_repo/lerobot/pi05_base", local_files_only=True)
     policy.to("cuda")
 
+# --- 插入断网补丁 ---
+    import os
+    os.environ["HF_HUB_OFFLINE"] = "1"
+    os.environ["TRANSFORMERS_OFFLINE"] = "1"
+    # -----------------------
+
+
     # Test forward pass with dummy data
     batch_size = 1
     preprocessor, postprocessor = make_pi05_pre_post_processors(config=config, dataset_stats=dataset_stats)
