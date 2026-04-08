@@ -43,7 +43,7 @@
 
 3. **运行测试**：
    ```bash
-   python -m pytest lerobot/tests/policies/pi0_pi05/test_pi05.py -q
+   python -m pytest lerobot/tests/policies/pi0_pi05/test_pi05.py -s
    ```
 
 ---
