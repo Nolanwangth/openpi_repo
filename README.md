@@ -66,3 +66,55 @@
 git add .
 git commit -m "feat: 描述你的改动"
 git push origin main
+```
+
+### 2. Pi05 快速 smoke（50 step）
+
+先：`conda activate pi05_env`，`cd /home/nolan/vla/openpi_repo`。
+
+**A. 不开 W&B**
+
+```bash
+lerobot-train \
+  --dataset.repo_id=local/agibot \
+  --dataset.root=/home/nolan/vla/openpi_repo/lerobot_dataset \
+  --dataset.use_imagenet_stats=false \
+  --policy.type=pi05 \
+  --policy.pretrained_path=/home/nolan/vla/openpi_repo/lerobot/pi05_base \
+  --policy.push_to_hub=false \
+  --output_dir=./outputs/pi05_smoke_$(date +%Y%m%d_%H%M%S) \
+  --job_name=pi05_smoke \
+  --steps=50 \
+  --batch_size=1 \
+  --num_workers=2 \
+  --policy.gradient_checkpointing=true \
+  --policy.train_expert_only=true \
+  --policy.dtype=bfloat16 \
+  --wandb.enable=false \
+  --log_freq=10
+```
+
+**B. 开 W&B**（同一用户下先 `wandb login` 一次即可）
+
+```bash
+lerobot-train \
+  --dataset.repo_id=local/agibot \
+  --dataset.root=/home/nolan/vla/openpi_repo/lerobot_dataset \
+  --dataset.use_imagenet_stats=false \
+  --policy.type=pi05 \
+  --policy.pretrained_path=/home/nolan/vla/openpi_repo/lerobot/pi05_base \
+  --policy.push_to_hub=false \
+  --output_dir=./outputs/pi05_smoke_$(date +%Y%m%d_%H%M%S) \
+  --job_name=pi05_smoke \
+  --steps=50 \
+  --batch_size=1 \
+  --num_workers=2 \
+  --policy.gradient_checkpointing=true \
+  --policy.train_expert_only=true \
+  --policy.dtype=bfloat16 \
+  --wandb.enable=true \
+  --wandb.project=pi05-agibot \
+  --log_freq=10
+```
+
+可选：要写到指定 team 时，在 B 里再加一行 `--wandb.entity=你在 wandb 上的真实用户名`。

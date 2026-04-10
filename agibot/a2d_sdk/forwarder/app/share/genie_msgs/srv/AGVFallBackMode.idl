@@ -1,0 +1,24 @@
+// generated from rosidl_adapter/resource/srv.idl.em
+// with input from genie_msgs/srv/hal/agv/AGVFallBackMode.srv
+// generated code does not contain a copyright notice
+
+#include "std_msgs/msg/Header.idl"
+
+module genie_msgs {
+  module srv {
+    @verbatim (language="comment", text=
+      "/hal/fallback_mode 控制底盘进入和退出fallback模式")
+    struct AGVFallBackMode_Request {
+      std_msgs::msg::Header header;
+
+      @verbatim (language="comment", text=
+        "1: 进入fallback模式， 2：退出fallback模式")
+      int32 control_id;
+    };
+    struct AGVFallBackMode_Response {
+      @verbatim (language="comment", text=
+        "0:成功， 其他: 错误")
+      int32 error_code;
+    };
+  };
+};

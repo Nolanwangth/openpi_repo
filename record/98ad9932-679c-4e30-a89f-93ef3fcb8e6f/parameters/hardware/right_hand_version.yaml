@@ -1,0 +1,8 @@
+type: finger
+producer: oymotion
+model: Roh
+API_version: ""
+protocol_version: v0.3
+firmware_version: v1.3.113
+hardware_version: 0 1
+boot_version: v1.34

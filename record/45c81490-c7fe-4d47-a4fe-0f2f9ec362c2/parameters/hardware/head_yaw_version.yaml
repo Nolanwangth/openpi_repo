@@ -1,0 +1,9 @@
+type: motor
+producer: eyou
+model: EuPP08-036
+device_type: 131474
+vendor_id: 1640
+product_id: 2361345
+serial_num: 5326423
+hardware_version: V2.0CANFD
+software_version: V142-0264

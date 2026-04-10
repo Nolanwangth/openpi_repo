@@ -1,0 +1,17 @@
+// generated from rosidl_adapter/resource/msg.idl.em
+// with input from genie_msgs/msg/app/pnc/TaskPauseRequest.msg
+// generated code does not contain a copyright notice
+
+#include "genie_msgs/msg/TaskHeader.idl"
+
+module genie_msgs {
+  module msg {
+    struct TaskPauseRequest {
+      genie_msgs::msg::TaskHeader header;
+
+      string uuid;
+
+      string detail;
+    };
+  };
+};

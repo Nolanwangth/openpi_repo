@@ -1,0 +1,83 @@
+{
+    "AID": "A2D0021B700174",
+    "author": "agibot",
+    "camera_fps": [
+        "30",
+        "30",
+        "30",
+        "30",
+        "30",
+        "30",
+        "30"
+    ],
+    "camera_list": [
+        "hand_left",
+        "hand_right",
+        "head_center_fisheye",
+        "head_left_fisheye",
+        "head_right_fisheye",
+        "head_depth",
+        "head_color"
+    ],
+    "camera_type": [
+        "d405",
+        "d405",
+        "fisheye",
+        "fisheye",
+        "fisheye",
+        "fisheye",
+        "fisheye"
+    ],
+    "clip_end_time": 1764166766,
+    "clip_start_time": 1764166739,
+    "create_time": "2025-11-26 22:18:59",
+    "data_validate": {
+        "reason": "",
+        "validate": true
+    },
+    "duration": 27,
+    "ee_list": [
+        {
+            "name": "left_hand",
+            "type": "oymotion_finger_Roh"
+        },
+        {
+            "name": "right_hand",
+            "type": "oymotion_finger_Roh"
+        }
+    ],
+    "episode_id": 0,
+    "episode_token": "",
+    "file_size": 2118044026,
+    "fps": {
+        "hand_left_color": 30.03262316644144,
+        "hand_right_color": 30.032197365780096,
+        "head_center_fisheye": 30.048909833354525,
+        "head_color": 30.042371325828856,
+        "head_depth": 30.049002114440228,
+        "head_left_fisheye": 30.042371325828856,
+        "head_right_fisheye": 30.048909833354525
+    },
+    "fps_validate": true,
+    "integrity": {
+        "integrity": true,
+        "reason": ""
+    },
+    "is_aligned": false,
+    "job_id": 0,
+    "robot_type": "A2D",
+    "sensor_type": [
+        "rgbd",
+        "rgbd",
+        "fisheye",
+        "fisheye",
+        "fisheye",
+        "fisheye",
+        "fisheye"
+    ],
+    "sw_version": "a2d_feat-master-gdk_140_patch_for_oy_4bf75ae9_2025-06-19-14-19-50.tar.gz",
+    "task_id": 13,
+    "task_mode": "ODC",
+    "text": "",
+    "version": "v0.0.2"
+}

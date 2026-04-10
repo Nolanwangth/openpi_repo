@@ -1,0 +1,26 @@
+rosbag2_bagfile_information:
+  version: 5
+  storage_identifier: mcap
+  duration:
+    nanoseconds: 33082142540
+  starting_time:
+    nanoseconds_since_epoch: 5895099382788
+  message_count: 3303
+  topics_with_message_count:
+    - topic_metadata:
+        name: /hal/left_arm_data
+        type: genie_msgs/msg/ArmState
+        serialization_format: cdr
+        offered_qos_profiles: ""
+      message_count: 3303
+  compression_format: ""
+  compression_mode: ""
+  relative_file_paths:
+    - left-arm-data_0.mcap
+  files:
+    - path: left-arm-data_0.mcap
+      starting_time:
+        nanoseconds_since_epoch: 5895099382788
+      duration:
+        nanoseconds: 33082142540
+      message_count: 3303

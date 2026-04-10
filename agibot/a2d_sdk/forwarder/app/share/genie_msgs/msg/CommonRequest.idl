@@ -1,0 +1,21 @@
+// generated from rosidl_adapter/resource/msg.idl.em
+// with input from genie_msgs/msg/common/CommonRequest.msg
+// generated code does not contain a copyright notice
+
+#include "std_msgs/msg/Header.idl"
+
+module genie_msgs {
+  module msg {
+    @verbatim (language="comment", text=
+      "frame id 无用, timestamp发送时间")
+    struct CommonRequest {
+      std_msgs::msg::Header header;
+
+      uint8 data;
+
+      string uuid;
+
+      string detail;
+    };
+  };
+};
