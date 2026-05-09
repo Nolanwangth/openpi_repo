@@ -118,3 +118,53 @@ lerobot-train \
 ```
 
 可选：要写到指定 team 时，在 B 里再加一行 `--wandb.entity=你在 wandb 上的真实用户名`。
+
+
+
+
+
+conda activate pi05_env
+cd /home/nolan/vla/openpi_repo
+lerobot-train \
+  --dataset.repo_id=local/agibot \
+  --dataset.root=/home/nolan/vla/openpi_repo/lerobot_datasets/agibot_record_pi05 \
+  --dataset.use_imagenet_stats=false \
+  --policy.type=pi05 \
+  --policy.pretrained_path=/home/nolan/vla/openpi_repo/lerobot/pi05_base \
+  --policy.push_to_hub=false \
+  --output_dir=./outputs/pi05_smoke_agibot_record_b1 \
+  --job_name=pi05_smoke_record \
+  --steps=50 \
+  --batch_size=8 \
+  --num_workers=2 \
+  --policy.gradient_checkpointing=true \
+  --policy.train_expert_only=true \
+  --policy.dtype=bfloat16 \
+  --wandb.enable=false \
+  --log_freq=10
+
+
+#最终命令
+conda activate pi05_env
+cd /home/nolan/vla/openpi_repo
+
+OUT=outputs/pi05_finetune_b16_$(date +%Y%m%d_%H%M%S)
+
+lerobot-train \
+  --dataset.repo_id=local/agibot \
+  --dataset.root=/home/nolan/vla/openpi_repo/lerobot_datasets/agibot_record_pi05 \
+  --dataset.use_imagenet_stats=false \
+  --policy.type=pi05 \
+  --policy.pretrained_path=/home/nolan/vla/openpi_repo/lerobot/pi05_base \
+  --policy.push_to_hub=false \
+  --output_dir="$OUT" \
+  --job_name=pi05_finetune_b32 \
+  --steps=50000 \
+  --batch_size=32 \
+  --log_wall_time_seconds=1 \
+  --log_freq=1000 \
+  --num_workers=8 \
+  --policy.gradient_checkpointing=true \
+  --policy.train_expert_only=true \
+  --policy.dtype=bfloat16 \
+  --wandb.enable=false

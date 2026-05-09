@@ -17,6 +17,7 @@ import dataclasses
 import logging
 import time
 from contextlib import nullcontext
+from pathlib import Path
 from pprint import pformat
 from typing import Any
 
@@ -408,6 +409,9 @@ def train(cfg: TrainPipelineConfig, accelerator: Accelerator | None = None):
             f"Start offline training on a fixed dataset, with effective batch size: {effective_batch_size}"
         )
 
+    last_wall_loss_log = time.perf_counter()
+    train_wall_t0 = time.perf_counter()
+
     for _ in range(step, cfg.steps):
         start_time = time.perf_counter()
         batch = next(dl_iter)
@@ -431,6 +435,21 @@ def train(cfg: TrainPipelineConfig, accelerator: Accelerator | None = None):
         if is_main_process:
             progbar.update(1)
         train_tracker.step()
+        if (
+            is_main_process
+            and getattr(cfg, "log_wall_time_seconds", 0.0) > 0
+            and time.perf_counter() - last_wall_loss_log >= cfg.log_wall_time_seconds
+        ):
+            wall_elapsed = time.perf_counter() - train_wall_t0
+            loss_val = train_tracker.metrics["loss"].val
+            grdn_val = train_tracker.metrics["grad_norm"].val
+            lr_val = train_tracker.metrics["lr"].val
+            print(
+                f"[train] t={wall_elapsed:6.1f}s step={step:6d} loss={loss_val:.6f} "
+                f"grad_norm={grdn_val:.4f} lr={lr_val:.2e}",
+                flush=True,
+            )
+            last_wall_loss_log = time.perf_counter()
         is_log_step = cfg.log_freq > 0 and step % cfg.log_freq == 0 and is_main_process
         is_saving_step = step % cfg.save_freq == 0 or step == cfg.steps
         is_eval_step = cfg.eval_freq > 0 and step % cfg.eval_freq == 0
@@ -531,6 +550,17 @@ def train(cfg: TrainPipelineConfig, accelerator: Accelerator | None = None):
 
     if is_main_process:
         logging.info("End of training")
+
+        if cfg.save_checkpoint and cfg.output_dir is not None:
+            final_dir = Path(cfg.output_dir) / "final_model"
+            final_dir.mkdir(parents=True, exist_ok=True)
+            logging.info("Saving final policy weights to %s", final_dir)
+            unwrapped = accelerator.unwrap_model(policy)
+            unwrapped.save_pretrained(final_dir)
+            if preprocessor is not None:
+                preprocessor.save_pretrained(final_dir)
+            if postprocessor is not None:
+                postprocessor.save_pretrained(final_dir)
 
         if cfg.policy.push_to_hub:
             unwrapped_policy = accelerator.unwrap_model(policy)

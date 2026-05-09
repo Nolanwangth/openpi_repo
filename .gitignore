@@ -60,6 +60,7 @@ env/
 
 # ---------- logs / wandb ----------
 logs/
+agibot/a2d_sdk/log/
 wandb/
 
 # ---------- agibot ----------
@@ -114,6 +115,18 @@ lerobot/pi05_base/**
 !lerobot/**/*.md
 !lerobot/**/*.txt
 !lerobot/**/*.sh
+
+# ---------- lerobot_datasets（本地数据集目录，常为 lerobot_dataset 的复数路径）----------
+lerobot_datasets/**
+!lerobot_datasets/
+!lerobot_datasets/**/
+!lerobot_datasets/**/*.json
+!lerobot_datasets/**/*.meta
+!lerobot_datasets/**/*.yaml
+!lerobot_datasets/**/*.yml
+!lerobot_datasets/**/*.txt
+!lerobot_datasets/**/*.md
+# 不取消忽略 *.parquet：本地 lerobot_datasets 常为 GB 级分片，git add 会长时间卡住
 
 # ---------- lerobot_dataset ----------
 # 默认全忽略，再白名单重要小文件

@@ -1,0 +1,160 @@
+{
+    "codebase_version": "v3.0",
+    "robot_type": "agibot_a2d",
+    "total_episodes": 51,
+    "total_frames": 44118,
+    "total_tasks": 1,
+    "chunks_size": 1000,
+    "data_files_size_in_mb": 100,
+    "video_files_size_in_mb": 200,
+    "fps": 30,
+    "splits": {
+        "train": "0:51"
+    },
+    "data_path": "data/chunk-{chunk_index:03d}/file-{file_index:03d}.parquet",
+    "video_path": null,
+    "features": {
+        "action": {
+            "dtype": "float32",
+            "shape": [
+                26
+            ],
+            "names": [
+                "arm_0",
+                "arm_1",
+                "arm_2",
+                "arm_3",
+                "arm_4",
+                "arm_5",
+                "arm_6",
+                "arm_7",
+                "arm_8",
+                "arm_9",
+                "arm_10",
+                "arm_11",
+                "arm_12",
+                "arm_13",
+                "left_thumb_rot",
+                "left_index",
+                "left_mid",
+                "left_ring",
+                "left_pinky",
+                "left_thumb_bend",
+                "right_thumb_rot",
+                "right_index",
+                "right_mid",
+                "right_ring",
+                "right_pinky",
+                "right_thumb_bend"
+            ]
+        },
+        "observation.state": {
+            "dtype": "float32",
+            "shape": [
+                26
+            ],
+            "names": [
+                "arm_0",
+                "arm_1",
+                "arm_2",
+                "arm_3",
+                "arm_4",
+                "arm_5",
+                "arm_6",
+                "arm_7",
+                "arm_8",
+                "arm_9",
+                "arm_10",
+                "arm_11",
+                "arm_12",
+                "arm_13",
+                "left_thumb_rot",
+                "left_index",
+                "left_mid",
+                "left_ring",
+                "left_pinky",
+                "left_thumb_bend",
+                "right_thumb_rot",
+                "right_index",
+                "right_mid",
+                "right_ring",
+                "right_pinky",
+                "right_thumb_bend"
+            ]
+        },
+        "observation.images.base_0_rgb": {
+            "dtype": "image",
+            "shape": [
+                800,
+                1280,
+                3
+            ],
+            "names": [
+                "height",
+                "width",
+                "channel"
+            ]
+        },
+        "observation.images.left_wrist_0_rgb": {
+            "dtype": "image",
+            "shape": [
+                480,
+                848,
+                3
+            ],
+            "names": [
+                "height",
+                "width",
+                "channel"
+            ]
+        },
+        "observation.images.right_wrist_0_rgb": {
+            "dtype": "image",
+            "shape": [
+                480,
+                848,
+                3
+            ],
+            "names": [
+                "height",
+                "width",
+                "channel"
+            ]
+        },
+        "timestamp": {
+            "dtype": "float32",
+            "shape": [
+                1
+            ],
+            "names": null
+        },
+        "frame_index": {
+            "dtype": "int64",
+            "shape": [
+                1
+            ],
+            "names": null
+        },
+        "episode_index": {
+            "dtype": "int64",
+            "shape": [
+                1
+            ],
+            "names": null
+        },
+        "index": {
+            "dtype": "int64",
+            "shape": [
+                1
+            ],
+            "names": null
+        },
+        "task_index": {
+            "dtype": "int64",
+            "shape": [
+                1
+            ],
+            "names": null
+        }
+    }
+}

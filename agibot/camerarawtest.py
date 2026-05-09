@@ -5,7 +5,7 @@ import numpy as np
 from a2d_sdk.robot import CosineCamera as Camera
 
 class AgibotCameraPro:
-    def __init__(self, cam_name="head"):
+    def __init__(self, cam_name="hand_right"):
         self.cam_name = cam_name
         # 初始化相机组 [cite: 1282]
         self.camera = Camera([self.cam_name])
@@ -46,7 +46,7 @@ class AgibotCameraPro:
         self.camera.close() # 必须调用释放资源 
 
 def run_optimized_test():
-    cam_name = "head"
+    cam_name = "hand_left"
     streamer = AgibotCameraPro(cam_name)
     
     cv2.namedWindow(f"Agibot G01 [{cam_name}]", cv2.WINDOW_NORMAL)
