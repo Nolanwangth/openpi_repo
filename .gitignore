@@ -1,180 +1,24 @@
-# =========================
-# OpenPI Repo .gitignore
-# 目标：
-# 1) agibot / lerobot / lerobot_dataset / record / outputs 里的重要小文件可提交
-# 2) 大文件（权重/视频/原始流/训练产物）默认拦截
-# =========================
+# ============================================================
+# 白名单模式：只关注 agibot/、lerobot/、scripts/
+# 根目录其余所有内容全部忽略
+# ============================================================
 
-# ---------- 全局大文件后缀（强拦截） ----------
-*.safetensors
-*.pth
-*.pt
-*.ckpt
-*.bin
-*.onnx
-*.engine
-*.tflite
-*.yuv
-*.h265
-*.h264
-*.hevc
-*.mp4
-*.mkv
-*.avi
-*.mov
-*.raw
-*.npy
-*.npz
-*.parquet
-*.tar
-*.tar.gz
-*.tgz
-*.zip
-*.7z
-*.rar
-*.whl
+# 忽略根目录下的所有内容
+/*
 
-# ---------- 常规项目无关 ----------
-__pycache__/
-*.py[cod]
-*$py.class
-.venv/
-venv/
-env/
-.env
-.pytest_cache/
-.vscode/
-.idea/
-.DS_Store
+# 保留本文件自身和根目录 README
+!.gitignore
+!/README.md
 
-# ---------- 编译产物 ----------
-*.so
-*.so*
-*.a
-*.lib
-*.dll
-*.dylib
-*.exe
-*.o
-*.obj
+# ── 跟踪的顶层目录 ──────────────────────────────────────────
+!/agibot/
+!/lerobot/
+!/scripts/
 
-# ---------- logs / wandb ----------
-logs/
-agibot/a2d_sdk/log/
-wandb/
+# ── agibot 内的排除项 ───────────────────────────────────────
+# 忽略整个 a2d_sdk 子目录
+/agibot/a2d_sdk/
 
-# ---------- agibot ----------
-# 默认可提交代码与配置；仅拦截重型二进制/产物
-agibot/**/*.bag
-agibot/**/*.db3
-agibot/**/*.pcd
-agibot/**/*.ply
-agibot/**/*.npy
-agibot/**/*.npz
-agibot/a2d_sdk/forwarder/app/bin/aorta
-agibot/a2d_sdk/forwarder/app/**
-!agibot/a2d_sdk/forwarder/
-!agibot/a2d_sdk/forwarder/app/
-!agibot/a2d_sdk/forwarder/app/share/
-!agibot/a2d_sdk/forwarder/app/share/genie_msgs/
-!agibot/a2d_sdk/forwarder/app/share/genie_msgs/**
-
-# 建议保留并上传的“源码/配置/元数据”类型
-!agibot/**/*.py
-!agibot/**/*.json
-!agibot/**/*.yaml
-!agibot/**/*.yml
-!agibot/**/*.toml
-!agibot/**/*.ini
-!agibot/**/*.cfg
-!agibot/**/*.conf
-!agibot/**/*.pbtxt
-!agibot/**/*.proto
-!agibot/**/*.md
-!agibot/**/*.txt
-!agibot/**/*.sh
-
-# ---------- lerobot ----------
-# 代码和配置默认可提交；大模型权重目录默认忽略
-lerobot/pi05_base/**
-!lerobot/pi05_base/
-!lerobot/pi05_base/**/
-!lerobot/pi05_base/**/*.json
-!lerobot/pi05_base/**/*.meta
-!lerobot/pi05_base/**/*.yaml
-!lerobot/pi05_base/**/*.yml
-!lerobot/pi05_base/**/*.txt
-!lerobot/pi05_base/**/*.md
-!lerobot/**/*.py
-!lerobot/**/*.json
-!lerobot/**/*.yaml
-!lerobot/**/*.yml
-!lerobot/**/*.toml
-!lerobot/**/*.ini
-!lerobot/**/*.cfg
-!lerobot/**/*.md
-!lerobot/**/*.txt
-!lerobot/**/*.sh
-
-# ---------- lerobot_datasets（本地数据集目录，常为 lerobot_dataset 的复数路径）----------
-lerobot_datasets/**
-!lerobot_datasets/
-!lerobot_datasets/**/
-!lerobot_datasets/**/*.json
-!lerobot_datasets/**/*.meta
-!lerobot_datasets/**/*.yaml
-!lerobot_datasets/**/*.yml
-!lerobot_datasets/**/*.txt
-!lerobot_datasets/**/*.md
-# 不取消忽略 *.parquet：本地 lerobot_datasets 常为 GB 级分片，git add 会长时间卡住
-
-# ---------- lerobot_dataset ----------
-# 默认全忽略，再白名单重要小文件
-lerobot_dataset/**
-!lerobot_dataset/
-!lerobot_dataset/**/
-!lerobot_dataset/**/*.json
-!lerobot_dataset/**/*.meta
-!lerobot_dataset/**/*.yaml
-!lerobot_dataset/**/*.yml
-!lerobot_dataset/**/*.txt
-!lerobot_dataset/**/*.md
-!lerobot_dataset/**/*.parquet
-
-# ---------- record ----------
-# 默认全忽略，再白名单重要小文件（例如 meta_info.json）
-record/**
-!record/
-!record/**/
-!record/**/*.json
-!record/**/*.meta
-!record/**/*.yaml
-!record/**/*.yml
-!record/**/*.txt
-!record/**/*.md
-
-# ---------- outputs ----------
-# 默认全忽略，再白名单重要小文件（训练配置/日志摘要）
-outputs/**
-!outputs/
-!outputs/**/
-!outputs/**/*.json
-!outputs/**/*.meta
-!outputs/**/*.yaml
-!outputs/**/*.yml
-!outputs/**/*.txt
-!outputs/**/*.md
-
-# ---------- 兼容目录名 ----------
-lerobotdata/**
-!lerobotdata/
-!lerobotdata/**/
-!lerobotdata/**/*.json
-!lerobotdata/**/*.meta
-!lerobotdata/**/*.yaml
-!lerobotdata/**/*.yml
-!lerobotdata/**/*.txt
-!lerobotdata/**/*.md
-
-
-
+# ── lerobot 内的排除项 ──────────────────────────────────────
+# 忽略 pi05_base 下的 safetensors 权重文件
+/lerobot/pi05_base/**/*.safetensors
