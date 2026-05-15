@@ -1,9 +1,0 @@
-type: motor
-producer: eyou
-model: EuPH25-121
-device_type: 131474
-vendor_id: 1640
-product_id: 2237697
-serial_num: 3817754
-hardware_version: V2.0CANFD
-software_version: V142-0264

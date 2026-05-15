@@ -56,7 +56,7 @@ cd /home/nolan/vla/openpi_repo
 PYTHONUNBUFFERED=1 /home/nolan/anaconda3/envs/pi05_env/bin/python -u agibot/agibot_pi05_server.py \
   --host 0.0.0.0 \
   --port 9000 \
-  --model-path lerobot/pi05_base \
+  --model-path outputs/pi05_finetune_b16_20260509_144211/checkpoints/040000/pretrained_model \
   --task "pick up the torque gun" \
   --execution-horizon 50 \
   --blend-steps 40
@@ -79,7 +79,7 @@ source env.sh
 cd /home/nolan/vla/openpi_repo
 python agibot/agibot_client.py \
   --host 127.0.0.1 \
-  --port 9100 \
+  --port 9000 \
   --hz 30 \
   --task "pick up the torque gun" \
   --request-horizon 20 \
@@ -93,7 +93,7 @@ source env.sh
 cd /home/nolan/vla/openpi_repo
 python agibot/agibot_client_mock.py \
   --host 127.0.0.1 \
-  --port 9100 \
+  --port 9000 \
   --hz 30 \
   --task "pick up the torque gun" \
   --request-horizon 20 \

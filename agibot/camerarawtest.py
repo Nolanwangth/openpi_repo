@@ -4,89 +4,114 @@ import threading
 import numpy as np
 from a2d_sdk.robot import CosineCamera as Camera
 
-class AgibotCameraPro:
-    def __init__(self, cam_name="hand_right"):
-        self.cam_name = cam_name
-        # 初始化相机组 [cite: 1282]
-        self.camera = Camera([self.cam_name])
-        self.latest_frame = None
+# head：头部 RGB；head_center_fisheye：头部中央鱼眼（广角），见 GDK v1.5 PDF 5.5.1 /camera/head_center_fisheye
+CAM_NAMES = ("head", "head_center_fisheye")
+# 拉取 get_latest_image 与主循环刷新上限（Hz）
+CAM_POLL_HZ = 30.0
+
+
+def rgb_to_bgr_for_imshow(img: np.ndarray) -> np.ndarray:
+    """CosineCamera 返回多为 RGB；cv2.imshow 按 BGR 显示，不转换则红蓝会颠倒。"""
+    if img is None or img.ndim != 3:
+        return img
+    c = img.shape[2]
+    if c == 3:
+        return cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
+    if c == 4:
+        return cv2.cvtColor(img, cv2.COLOR_RGBA2BGR)
+    return img
+
+
+class AgibotMultiCameraPro:
+    def __init__(self, cam_names=CAM_NAMES):
+        self.cam_names = list(cam_names)
+        self.camera = Camera(self.cam_names)
+        self.latest_frames = {n: None for n in self.cam_names}
         self.running = True
         self.lock = threading.Lock()
-        
-        # 官方建议：等待资源初始化 
-        print(f"正在预热相机服务: {cam_name}...")
-        time.sleep(2.0) 
-        
-        # 启动后台采集线程，确保 30Hz 不受主线程阻塞影响
+
+        print(f"正在预热相机服务: {', '.join(self.cam_names)}...")
+        time.sleep(2.0)
+
         self.thread = threading.Thread(target=self._update_loop, daemon=True)
         self.thread.start()
 
     def _update_loop(self):
-        """独立采集线程"""
+        period = 1.0 / CAM_POLL_HZ
+        next_tick = time.perf_counter()
         while self.running:
-            # 实时图像获取 [cite: 1298]
-            result = self.camera.get_latest_image(self.cam_name)
-            
-            if result is not None:
-                # 图像数据为 numpy 数组 
-                img, ts = result 
-                with self.lock:
-                    self.latest_frame = img
-            
-            # 官方默认帧率通常为 30Hz ，此处微调休眠确保稳定性
-            time.sleep(0.01)
+            for name in self.cam_names:
+                result = self.camera.get_latest_image(name)
+                if result is not None:
+                    img, _ts = result
+                    with self.lock:
+                        self.latest_frames[name] = img
+            next_tick += period
+            sleep_s = next_tick - time.perf_counter()
+            if sleep_s > 0:
+                time.sleep(sleep_s)
+            else:
+                next_tick = time.perf_counter()
 
-    def get_frame(self):
+    def get_frame(self, cam_name: str):
         with self.lock:
-            return self.latest_frame
+            return self.latest_frames.get(cam_name)
 
     def stop(self):
         self.running = False
         self.thread.join()
-        self.camera.close() # 必须调用释放资源 
+        self.camera.close()
+
+    def window_title(self, cam_name: str) -> str:
+        return f"Agibot G01 [{cam_name}]"
+
 
 def run_optimized_test():
-    cam_name = "hand_left"
-    streamer = AgibotCameraPro(cam_name)
-    
-    cv2.namedWindow(f"Agibot G01 [{cam_name}]", cv2.WINDOW_NORMAL)
-    
+    streamer = AgibotMultiCameraPro(CAM_NAMES)
+
+    for name in CAM_NAMES:
+        cv2.namedWindow(streamer.window_title(name), cv2.WINDOW_NORMAL)
+
     last_log_time = time.time()
     frame_count = 0
+    period = 1.0 / CAM_POLL_HZ
+    next_tick = time.perf_counter()
 
     try:
         while True:
-            start_time = time.time()
-            
-            img = streamer.get_frame()
-            if img is None:
-                continue
-
             frame_count += 1
+            for name in CAM_NAMES:
+                img = streamer.get_frame(name)
+                if img is None:
+                    continue
+                show_img = rgb_to_bgr_for_imshow(img.copy())
+                cv2.imshow(streamer.window_title(name), show_img)
 
-            # ---------------- 极简预览逻辑 ----------------
-            # 仅在需要预览时进行 copy 或处理，不干扰采集
-            show_img = img.copy()
-            
-            # 每秒统计
             if time.time() - last_log_time >= 1.0:
-                fps = frame_count / (time.time() - last_log_time)
-                # 监控相机性能统计信息 [cite: 1309]
-                sdk_fps = streamer.camera.get_fps(cam_name)
-                print(f"[统计] 显示FPS: {fps:.1f} | SDK内部FPS: {sdk_fps}")
+                elapsed = time.time() - last_log_time
+                fps = frame_count / elapsed
+                sdk_parts = [
+                    f"{n}={streamer.camera.get_fps(n):.1f}" for n in CAM_NAMES
+                ]
+                print(f"[统计] 主循环≈{fps:.1f} Hz | SDK FPS: " + ", ".join(sdk_parts))
                 frame_count = 0
                 last_log_time = time.time()
 
-            cv2.imshow(f"Agibot G01 [{cam_name}]", show_img)
-            
-            # 按 Q 退出
-            if cv2.waitKey(1) & 0xFF == ord('q'):
+            if cv2.waitKey(1) & 0xFF == ord("q"):
                 break
+
+            next_tick += period
+            sleep_s = next_tick - time.perf_counter()
+            if sleep_s > 0:
+                time.sleep(sleep_s)
+            else:
+                next_tick = time.perf_counter()
 
     finally:
         streamer.stop()
         cv2.destroyAllWindows()
         print("测试结束，资源已释放")
+
 
 if __name__ == "__main__":
     run_optimized_test()

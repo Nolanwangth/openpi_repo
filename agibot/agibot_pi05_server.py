@@ -21,7 +21,7 @@ from lerobot.policies.pi05.configuration_pi05 import PI05Config
 from lerobot.policies.pi05.modeling_pi05 import PI05Policy
 from lerobot.policies.rtc.configuration_rtc import RTCConfig
 from lerobot.processor.normalize_processor import NormalizerProcessorStep
-from lerobot.utils.constants import ACTION
+from lerobot.utils.constants import ACTION, OBS_STATE
 
 
 def choose_device() -> str:
@@ -185,15 +185,19 @@ class Pi05Session:
         return torch.cat(rows, dim=0).unsqueeze(0)
 
     def _build_batch(self, obs: Observation):
-        state_32 = np.zeros((32,), dtype=np.float32)
-        state_32[:26] = obs.joints_26
+        state_dim = int(self.policy.config.input_features[OBS_STATE].shape[0])
+        state_vec = np.zeros((state_dim,), dtype=np.float32)
+        j = np.asarray(obs.joints_26, dtype=np.float32).reshape(-1)
+        n = min(j.shape[0], state_dim)
+        state_vec[:n] = j[:n]
 
         def img_to_tensor(img: np.ndarray) -> torch.Tensor:
-            return torch.from_numpy(np.ascontiguousarray(img)).permute(2, 0, 1).float() / 255.0
+            arr = np.ascontiguousarray(img, dtype=np.uint8)
+            return torch.from_numpy(arr.copy()).permute(2, 0, 1).float() / 255.0
 
         task = obs.task if obs.task else self.default_task
         batch = {
-            "observation.state": torch.from_numpy(state_32),
+            "observation.state": torch.from_numpy(state_vec),
             "observation.images.base_0_rgb": img_to_tensor(obs.head_rgb),
             "observation.images.left_wrist_0_rgb": img_to_tensor(obs.left_wrist_rgb),
             "observation.images.right_wrist_0_rgb": img_to_tensor(obs.right_wrist_rgb),
@@ -228,7 +232,8 @@ class Pi05Session:
             single = action_chunk[:, i, :]
             processed_actions.append(self.postprocessor(single))
         action_tensor = torch.stack(processed_actions, dim=1).squeeze(0)
-        chunk = action_tensor[:, :26].detach().float().cpu().numpy().astype(np.float32)
+        action_dim = int(self.policy.config.output_features[ACTION].shape[0])
+        chunk = action_tensor[:, :action_dim].detach().float().cpu().numpy().astype(np.float32)
         infer_ms = (time.perf_counter() - tic) * 1000.0
         self._latest_chunk_id += 1
         return chunk, self._latest_chunk_id, infer_ms
